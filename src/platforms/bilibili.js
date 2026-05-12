@@ -1,6 +1,6 @@
 // src/platforms/bilibili.js
 const pLimit = require('p-limit');
-const { runCommand } = require('../exec');
+const { runCommand, runCommandArgs } = require('../exec');
 
 function parseBilibiliHot(items) {
   return items.map(item => ({
@@ -23,22 +23,22 @@ function buildBilibiliItem(base, searchResult) {
   return { ...base, description: searchResult.description || '' };
 }
 
-async function fetchDetail(item, run) {
+async function fetchDetail(item, run, runArgs = runCommandArgs) {
   try {
-    const query = item.title.replace(/"/g, '');
-    const raw = await run(`opencli bilibili search "${query}" --format json --limit 1`);
-    const results = JSON.parse(raw);
+    const results = JSON.parse(
+      await runArgs('opencli', ['bilibili', 'search', item.title, '--format', 'json', '--limit', '1'])
+    );
     return buildBilibiliItem(item, results[0] || null);
   } catch {
     return item;
   }
 }
 
-async function fetchHot({ run = runCommand, limit = 20 } = {}) {
+async function fetchHot({ run = runCommand, runArgs = runCommandArgs, limit = 20 } = {}) {
   const raw = await run(`opencli bilibili hot --format json --limit ${limit}`);
   const items = parseBilibiliHot(JSON.parse(raw));
   const limiter = pLimit(5);
-  return Promise.all(items.map(item => limiter(() => fetchDetail(item, run))));
+  return Promise.all(items.map(item => limiter(() => fetchDetail(item, run, runArgs))));
 }
 
 module.exports = { parseBilibiliHot, buildBilibiliItem, fetchHot };

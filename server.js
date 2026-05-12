@@ -31,8 +31,8 @@ async function refresh() {
   console.log('[refresh] Done.');
 }
 
-app.listen(PORT, async () => {
+app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
-  await refresh();
   setInterval(refresh, REFRESH_INTERVAL);
+  refresh().catch(err => console.error('[refresh] Fatal error on startup:', err));
 });

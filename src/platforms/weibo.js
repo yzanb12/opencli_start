@@ -1,5 +1,5 @@
 const pLimit = require('p-limit');
-const { runCommand } = require('../exec');
+const { runCommand, runCommandArgs } = require('../exec');
 
 function parseWeiboHot(items) {
   return items.map(item => {
@@ -28,22 +28,22 @@ function buildWeiboItem(base, searchResults) {
   return { ...base, description };
 }
 
-async function fetchDetail(item, run) {
+async function fetchDetail(item, run, runArgs = runCommandArgs) {
   try {
-    const query = item.title.replace(/"/g, '');
-    const raw = await run(`opencli weibo search "${query}" --format json --limit 3`);
-    const results = JSON.parse(raw);
+    const results = JSON.parse(
+      await runArgs('opencli', ['weibo', 'search', item.title, '--format', 'json', '--limit', '3'])
+    );
     return buildWeiboItem(item, Array.isArray(results) ? results : []);
   } catch {
     return item;
   }
 }
 
-async function fetchHot({ run = runCommand, limit = 20 } = {}) {
+async function fetchHot({ run = runCommand, runArgs = runCommandArgs, limit = 20 } = {}) {
   const raw = await run(`opencli weibo hot --format json --limit ${limit}`);
   const items = parseWeiboHot(JSON.parse(raw));
   const limiter = pLimit(5);
-  return Promise.all(items.map(item => limiter(() => fetchDetail(item, run))));
+  return Promise.all(items.map(item => limiter(() => fetchDetail(item, run, runArgs))));
 }
 
 module.exports = { parseWeiboHot, buildWeiboItem, fetchHot };
