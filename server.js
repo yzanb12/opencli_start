@@ -34,6 +34,11 @@ async function refresh() {
 // start the server
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
+  // refresh the data every hour
   setInterval(refresh, REFRESH_INTERVAL);
+  // refresh the data on startup
   refresh().catch(err => console.error('[refresh] Fatal error on startup:', err));
 });
+
+// export the server
+module.exports = app;
