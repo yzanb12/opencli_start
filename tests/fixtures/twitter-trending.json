@@ -1,9 +1,20 @@
-{
-  "ok": false,
-  "error": {
-    "code": "AUTH_REQUIRED",
-    "message": "Not logged into x.com (no ct0 cookie)",
-    "help": "Please open Chrome or Chromium and log in to https://x.com",
-    "exitCode": 77
+[
+  {
+    "category": "美国 的趋势",
+    "rank": 1,
+    "topic": "Explore Concrete",
+    "tweets": "N/A"
+  },
+  {
+    "category": "美国 的趋势",
+    "rank": 2,
+    "topic": "Lakers",
+    "tweets": "N/A"
+  },
+  {
+    "category": "美国 的趋势",
+    "rank": 3,
+    "topic": "Ajay Mitchell",
+    "tweets": "N/A"
   }
-}
+]
