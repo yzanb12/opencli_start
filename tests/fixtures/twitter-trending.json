@@ -1,0 +1,9 @@
+{
+  "ok": false,
+  "error": {
+    "code": "AUTH_REQUIRED",
+    "message": "Not logged into x.com (no ct0 cookie)",
+    "help": "Please open Chrome or Chromium and log in to https://x.com",
+    "exitCode": 77
+  }
+}
