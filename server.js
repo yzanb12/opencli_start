@@ -31,6 +31,7 @@ async function refresh() {
   console.log('[refresh] Done.');
 }
 
+// start the server
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
   setInterval(refresh, REFRESH_INTERVAL);
